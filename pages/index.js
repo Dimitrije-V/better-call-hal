@@ -5,14 +5,15 @@ import { PulseLoader } from "react-spinners";
 
 export default function Home() {
   const [contractInput, setContractInput] = useState("");
+  const [pdfFile, setPdfFile] = useState(null);
   const [result, setResult] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  async function onSubmit(event) {
+  async function onSubmitText(event) {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/api/text", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,13 +28,37 @@ export default function Home() {
 
       setResult(data.result);
       setContractInput("");
-
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
+    } finally {
+      setIsLoading(false); // set loading back to false
     }
-    finally {
+  }
+
+  async function onSubmitPdf(event) {
+    event.preventDefault();
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("pdf", pdfFile);
+      const response = await fetch("/api/file", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw data.error || new Error(`Request failed with status ${response.status}`);
+      }
+      setResult(data.result);
+      setPdfFile(null);
+    } catch (error) {
+      // Consider implementing your own error handling logic here
+      console.error(error);
+      alert(error.message);
+    } finally {
       setIsLoading(false); // set loading back to false
     }
   }
@@ -48,7 +73,7 @@ export default function Home() {
       <main className={styles.main}>
         <img src="/logo.png" className={styles.icon} />
         <h3>Generate advice which isn't legal advice</h3>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmitText}>
           <input
             type="text"
             name="contract"
@@ -58,6 +83,14 @@ export default function Home() {
           />
           <input type="submit" value="Generate advice" />
         </form>
+        <form onSubmit={onSubmitPdf}>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => setPdfFile(e.target.files[0])}
+          />
+          <input type="submit" value="Generate advice from PDF" />
+        </form>
         <div className={styles.result}>
           {isLoading ? (
             <div className={styles.loading}>
@@ -66,11 +99,15 @@ export default function Home() {
             </div>
           ) : (
             result.length > 0 && (
-              <ul>
-                {result.map((adviceString, index) => (
-                  <li key={index}>{adviceString}</li>
-                ))}
-              </ul>
+              result.split('\n\n').map((item) => {
+                const [quote, summary] = item.split('\n');
+                return (
+                  <ul>
+                    <em>{quote}</em>
+                    <li>{summary}</li>
+                  </ul>
+                )
+              })
             )
           )}
         </div>

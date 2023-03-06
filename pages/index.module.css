@@ -93,3 +93,27 @@
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
+
+.uploadButton {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.uploadButton:hover {
+  background-color: #eee;
+}
+
+.uploadIcon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  background-image: url("/upload-icon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
