@@ -42,7 +42,7 @@ const breakIntoSegments = (contract) => {
     const newArr = [""];
     let counter = 0;
     arr.forEach(string => {
-        if ((newArr[counter].length + string.length) < 7500) {
+        if ((newArr[counter].length + string.length) < 6000) {
             newArr[counter] = newArr[counter].concat(string)
         } else {
             counter += 1;
