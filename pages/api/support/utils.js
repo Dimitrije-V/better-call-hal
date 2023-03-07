@@ -5,8 +5,7 @@ function generateAdviceListPrompt(contractSegment) {
             "content": `You are a letting contract review tool.
                 Your goal is to read through segments of a letting contract and, thinking from the perspective of the tenant, return any particularly unusual and or adverse quotes found within it.
                 Quotes that demonstrate unfairness towards the tenant or unreasonableness should be prioritized.
-                Return only the quotes. Do not add any of your own text.
-                If nothing in the contract is particularly unusual or adverse, just return 'Nothing found'.` },
+                Return ONLY the quotes from the contract. Do not summarise or add any of your own text.` },
         {
             "role": "user", "content": `Contract segment: ${contractSegment}`
         },
@@ -22,9 +21,9 @@ function generateFilteringPrompt(adviceList) {
             "role": "system",
             "content": `You are a letting contract review tool.
                 The user will submit a list of quotes from a letting contract. Read through each quote, and judge whether it deviates from a standard letting contract.
-                If it does, summarise it, and include both it and the summary in your response. If it doesn't, remove it.
+                If it does, summarise it, and include both it and the summary in your response. If it doesn't, ignore it.
                 Quotes that demonstrate unfairness towards the tenant or unreasonableness should be prioritized.
-                The format of the response must be: 
+                The format of the end response must be: 
                 'Quote: \"[quote from contract segment]\",
                 Summary: [your summary]'
         
