@@ -11,5 +11,4 @@ How to run locally:
 3. create a .env file
 4. paste in a valid OpenAI API key
 5. npm run dev 
-6. ???
-7. profit
+6. go to to localhost:3000
