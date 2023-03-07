@@ -13,3 +13,9 @@ How to run locally:
 5. npm run dev 
 6. ???
 7. profit
+
+
+TODO:
+Make it look better
+Add employment contract support
+Fix the cursed .css files
