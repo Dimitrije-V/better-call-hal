@@ -4,7 +4,7 @@ import TextboxCard from "./cards/TextboxCard";
 
 export default function MyCard() {
     return (
-        <Grid.Container gap={2}>
+        <Grid.Container justify="center" gap={2}>
             <Grid sm={24} md={10}>
                 <PdfCard></PdfCard>
             </Grid>

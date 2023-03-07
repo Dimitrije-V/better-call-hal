@@ -42,5 +42,5 @@ const breakIntoSegments = (contract) => {
 module.exports = {
     generateAdviceListPrompt,
     generateFilteringPrompt,
-    breakIntoSegments
+    breakIntoSegments,
 }

@@ -2,7 +2,7 @@
 
 .main,
 .main {
-    background-color: #121138;
+    background-color: #10184a;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
     padding: 0;
@@ -54,6 +54,9 @@
     font-size: 1.25rem;
     line-height: 1.5;
     text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .main .result em {
@@ -62,6 +65,10 @@
 
 .main .result p {
     margin-top: 1rem;
+}
+
+.main title {
+    text-align: center;
 }
 
 @media(prefers-reduced-motion) {

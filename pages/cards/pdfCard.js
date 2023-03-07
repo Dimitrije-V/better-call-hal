@@ -37,12 +37,13 @@ export default function PdfCard() {
     return (
         <Card css={{ mw: "900" }}>
             <Card.Header>
-                <Text b>Enter Contract Via Textbox</Text>
+                <Text b>Enter Contract Via PDF Upload</Text>
             </Card.Header>
             <Card.Divider />
             <Card.Body css={{ py: "$10" }}>
                 <Text>
-                    Click "Upload" to upload a PDF file. Hit submit to send the file to be processed.
+                    Upload your .pdf file and hit submit to send it to be processed.
+                    Processing takes 1-2 minutes.
                 </Text>
                 <Card.Divider />
                 <Row justify="center">

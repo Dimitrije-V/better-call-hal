@@ -27,14 +27,25 @@ export default function Home() {
     return (
         <div>
             <main className={styles.main}>
-                <h1>AI Powered Contract Review</h1>
                 <section>
                     <div className={styles.hidden}>
-                        <h3>Stuff</h3>
-                        <p>Stuff</p>
+                        <h1>AI Powered Contract Review</h1>
                     </div>
                 </section>
-
+                <section>
+                    <div className={styles.hidden}>
+                        <p>
+                            The outputs of this tool are <strong>NOT LEGAL ADVICE</strong>.
+                            If in any doubt, speak to an actual solicitor.
+                        </p>
+                        <p>
+                            In my personal experience, the tool <strong>can</strong> provide useful insights, but has a tendency to pick up on insignificant quotes from your contract.
+                        </p>
+                        <p>
+                            The tool is not perfect, and is still in development. If you find any bugs, you can let me know at dimitrije@pm.me
+                        </p>
+                    </div>
+                </section>
                 <section>
                     <div className={styles.hidden}>
                         <MyCard></MyCard>

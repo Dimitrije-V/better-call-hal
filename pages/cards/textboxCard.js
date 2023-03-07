@@ -43,6 +43,11 @@ export default function TextboxCard() {
             </Card.Header>
             <Card.Divider />
             <Card.Body css={{ py: "$10" }}>
+                <Text>
+                    Enter your text in the textbox below, and hit "Enter" to submit it to be processed.
+                    Processing takes 1-2 minutes.
+                </Text>
+                <Card.Divider />
                 <div className="formContainer">
                     <form onSubmit={onSubmitText}>
                         <Input
