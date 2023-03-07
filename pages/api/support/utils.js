@@ -5,7 +5,7 @@ function generateAdviceListPrompt(contractSegment) {
         { "role": "system", "content": "If nothing in the contract is particularly unusual or adverse, just return 'Nothing found'." },
         { "role": "user", "content": `Contract segment: ${contractSegment}` },
         { "role": "assistant", "content": "Adverse points:" }
-    ]
+    ];
 };
 
 function generateFilteringPrompt(adviceList) {
@@ -19,7 +19,7 @@ function generateFilteringPrompt(adviceList) {
       Quotes should be seperated by one newline from summaries , summaries should be separated by two newlines from quotes.`
         },
         { "role": "user", "content": adviceList }
-    ]
+    ];
 };
 
 const breakIntoSegments = (contract) => {
@@ -34,8 +34,8 @@ const breakIntoSegments = (contract) => {
             counter += 1;
             newArr.push(string);
         }
-    })
-    return newArr
+    });
+    return newArr;
 };
 
 

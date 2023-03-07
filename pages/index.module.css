@@ -50,6 +50,15 @@
     gap: 2rem;
 }
 
+.main .or {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
 .main .result {
     font-size: 1.25rem;
     line-height: 1.5;

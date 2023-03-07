@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import MyCard from "./card";
+import ContractReviewComponent from "./components/contractReviewComponent";
 import styles from "./index.module.css";
 
 export default function Home() {
@@ -48,7 +48,7 @@ export default function Home() {
                 </section>
                 <section>
                     <div className={styles.hidden}>
-                        <MyCard></MyCard>
+                        <ContractReviewComponent />
                     </div>
                 </section>
             </main>

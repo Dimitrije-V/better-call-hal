@@ -10,7 +10,7 @@ const processContract = async (contract, openai) => {
             temperature: 0
         });
         adviceList.push(completion.data.choices[0].message.content);
-    }
+    };
 
     console.log(adviceList)
 
@@ -31,9 +31,9 @@ const processContract = async (contract, openai) => {
     });
 
     return completion;
-}
+};
 
 
 module.exports = {
     processContract
-}
+};

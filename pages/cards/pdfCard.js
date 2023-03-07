@@ -42,8 +42,7 @@ export default function PdfCard() {
             <Card.Divider />
             <Card.Body css={{ py: "$10" }}>
                 <Text>
-                    Upload your .pdf file and hit submit to send it to be processed.
-                    Processing takes 1-2 minutes.
+                    Upload your .pdf file and click submit to send it to be processed.
                 </Text>
                 <Card.Divider />
                 <Row justify="center">

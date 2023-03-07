@@ -61,7 +61,13 @@ export default async function (req, res) {
 
       const completion = await processContract(contract, openai);
       res.status(200).json({ result: completion.data.choices[0].message.content });
-    } catch (error) {
+    }
+
+    catch (error) {
+      if (error.response) {
+        console.error(error.response.status, error.response.data);
+        res.status(error.response.status).json(error.response.data);
+      }
       console.error(`Error with OpenAI API request: ${error.message}`);
       res.status(500).json({
         error: {
