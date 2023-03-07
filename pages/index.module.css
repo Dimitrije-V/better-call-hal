@@ -3,10 +3,11 @@
 .main,
 .main {
     background-color: #10184a;
-    color: #ffffff;
+    color: #ffffffea;
     font-family: 'Poppins', sans-serif;
     padding: 0;
     margin: 0;
+    text-align: center;
 }
 
 .main section {
@@ -19,7 +20,7 @@
 .main .hidden {
     opacity: 0;
     transform: translateX(-100%);
-    transition: all 1s;
+    transition: all 0.90s;
     filter: blur(5px)
 }
 

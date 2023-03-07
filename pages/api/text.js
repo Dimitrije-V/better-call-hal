@@ -29,6 +29,7 @@ export default async function (req, res) {
   try {
     const completion = await processContract(contract, openai);
     res.status(200).json({ result: completion.data.choices[0].message.content });
+    return;
   }
 
   catch (error) {
@@ -42,5 +43,6 @@ export default async function (req, res) {
         message: 'An error occurred during your request.',
       }
     });
+    return;
   }
 }

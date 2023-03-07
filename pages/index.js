@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import ContractReviewComponent from "./components/contractReviewComponent";
 import styles from "./index.module.css";
+import { Image } from "@nextui-org/react";
 
 export default function Home() {
     useEffect(() => {
@@ -27,11 +28,11 @@ export default function Home() {
     return (
         <div>
             <main className={styles.main}>
-                <section>
-                    <div className={styles.hidden}>
-                        <h1>AI Powered Contract Review</h1>
-                    </div>
-                </section>
+                <div className={styles.hidden}>
+                    <br /><br /><br />
+                    <h1>ChatGPT Powered Contract Review</h1>
+                    <Image src="logo.png" width="25%" height="25%" />
+                </div>
                 <section>
                     <div className={styles.hidden}>
                         <p>

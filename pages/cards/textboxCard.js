@@ -44,7 +44,7 @@ export default function TextboxCard() {
             <Card.Divider />
             <Card.Body css={{ py: "$10" }}>
                 <Text>
-                    Enter your text in the textbox below, and hit "Enter" to submit it to be processed.
+                    Copy-paste your contract into the textbox below, and hit "Enter" to submit it to be processed.
                 </Text>
                 <Card.Divider />
                 <div className="formContainer">
