@@ -14,6 +14,5 @@ How to run locally:
 6. go to to localhost:3000
 
 TODO:
-1. Make it look better
-2. Add employment contract support
+1. Host it
 3. Fix the cursed .css files
