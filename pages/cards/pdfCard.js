@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { PulseLoader } from "react-spinners";
-import { Card, Text, Button, Row } from "@nextui-org/react";
+import { useState, useRef } from "react";
+import { Card, Text, Button, Row, Loading } from "@nextui-org/react";
 import styles from ".././index.module.css";
 
-export default function PdfCard() {
+export default function PdfCard(props) {
     const [pdfFile, setPdfFile] = useState(null);
     const [result, setResult] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const inputFile = useRef(null);
 
     async function onSubmitPdf(event) {
         event.preventDefault();
@@ -14,6 +14,7 @@ export default function PdfCard() {
         try {
             const formData = new FormData();
             formData.append("pdf", pdfFile);
+            formData.append("contractType", props.contractType);
             const response = await fetch("/api/file", {
                 method: "POST",
                 body: formData,
@@ -30,8 +31,12 @@ export default function PdfCard() {
             console.error(error);
             alert(error.message);
         } finally {
-            setIsLoading(false); // set loading back to false
+            setIsLoading(false);
         }
+    };
+
+    const onButtonClick = () => {
+        inputFile.current.click();
     };
 
     return (
@@ -44,24 +49,31 @@ export default function PdfCard() {
                 <Text>
                     Upload your .pdf file and click submit to send it to be processed.
                 </Text>
-                <Card.Divider />
-                <Row justify="center">
+                <Row justify="flex-start">
                     <div>
-                        <form onSubmit={onSubmitPdf}>
-                            <input type="file" accept=".pdf" onChange={(e) => setPdfFile(e.target.files[0])} />
-                            <Button type="submit" size="sm"> Submit </Button>
+                        <form onSubmit={onSubmitPdf} style={{ display: 'flex' }}>
+                            <Button onClick={onButtonClick} size="md" className={styles.submitButton}>
+                                Upload .pdf file
+                                <input className={styles.hiddenButton}
+                                    type="file"
+                                    accept=".pdf"
+                                    ref={inputFile}
+                                    onChange={(e) => setPdfFile(e.target.files[0])} />
+                            </Button>
+                            {isLoading ? (
+                                <Button disabled auto bordered color="primary">
+                                    <Loading type="points-opacity" color="currentColor" size="md" />
+                                </Button>
+
+                            ) : (
+                                <Button type="submit" size="md" className={styles.submitButton}> Submit </Button>
+                            )}
                         </form>
                     </div>
                 </Row>
-                <Card.Divider />
             </Card.Body>
             <Card.Footer>
-                {isLoading ? (
-                    <div className={styles.loading}>
-                        <PulseLoader size={10} color={"#0072F5"} />
-                        <p>Processing...</p>
-                    </div>
-                ) : (
+                {
                     result.length > 0 && (
                         <div className={styles.resultContainer}>
                             {result.split('\n\n').map((item, index) => {
@@ -76,8 +88,9 @@ export default function PdfCard() {
                             })}
                         </div>
                     )
-                )}
+                }
+
             </Card.Footer>
-        </Card>
+        </Card >
     );
 }
