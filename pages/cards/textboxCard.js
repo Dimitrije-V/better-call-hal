@@ -1,9 +1,8 @@
-import { Card, Text, Button, Row, Input } from "@nextui-org/react";
+import { Button, Card, Text, Input, Loading, Row } from "@nextui-org/react";
 import { useState } from "react";
 import styles from ".././index.module.css";
-import { PulseLoader } from "react-spinners";
 
-export default function TextboxCard() {
+export default function TextboxCard(props) {
     const [contractInput, setContractInput] = useState("");
     const [result, setResult] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +16,7 @@ export default function TextboxCard() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ contract: contractInput }),
+                body: JSON.stringify({ contract: contractInput, contractType: props.contractType }),
             });
 
             const data = await response.json();
@@ -39,12 +38,12 @@ export default function TextboxCard() {
     return (
         <Card css={{ mw: "900" }}>
             <Card.Header>
-                <Text b>Enter Contract Via Textbox</Text>
+                <Text>Enter Contract Via Textbox</Text>
             </Card.Header>
             <Card.Divider />
             <Card.Body css={{ py: "$10" }}>
                 <Text>
-                    Copy-paste your contract into the textbox below, and hit "Enter" to submit it to be processed.
+                    Copy-paste your contract into the textbox below, and click "Submit" to send it to be processed.
                 </Text>
                 <Card.Divider />
                 <div className="formContainer">
@@ -67,16 +66,18 @@ export default function TextboxCard() {
                             value={contractInput}
                             onChange={(e) => setContractInput(e.target.value)}
                         />
+                        {isLoading ? (
+                            <Button disabled auto bordered color="primary">
+                                <Loading type="points-opacity" color="currentColor" size="md" />
+                            </Button>
+                        ) : (
+                            <Button type="submit" size="md" className={styles.submitButton} > Submit </Button>
+                        )}
                     </form>
                 </div>
             </Card.Body>
             <Card.Footer>
-                {isLoading ? (
-                    <div className={styles.loading}>
-                        <PulseLoader size={10} color={"#0072F5"} />
-                        <p>Processing...</p>
-                    </div>
-                ) : (
+                {
                     result.length > 0 && (
                         <div className={styles.resultContainer}>
                             {result.split('\n\n').map((item, index) => {
@@ -91,7 +92,7 @@ export default function TextboxCard() {
                             })}
                         </div>
                     )
-                )}
+                }
             </Card.Footer>
         </Card>
     );

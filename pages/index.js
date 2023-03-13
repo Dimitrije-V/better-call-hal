@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import ContractReviewComponent from "./components/contractReviewComponent";
+import ContractEntryComponent from "./components/contractEntryComponent";
 import styles from "./index.module.css";
 import { Image } from "@nextui-org/react";
 
@@ -8,18 +8,17 @@ export default function Home() {
         // create a new IntersectionObserver instance with a callback function
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
-                console.log(entry)
                 if (entry.isIntersecting) {
                     // if the element is intersecting the viewport, add the "show" class
-                    entry.target.classList.add(styles.show);
+                    entry.target.classList.toggle(styles.show, true);
                 } else {
                     // if the element is not intersecting the viewport, remove the "show" class
-                    entry.target.classList.remove(styles.show);
+                    entry.target.classList.toggle(styles.show, false);
                 }
             });
         });
 
-        const hiddenElements = document.querySelectorAll(`.${styles.hidden}`);
+        const hiddenElements = [...document.querySelectorAll(`.${styles.hidden}`)];
         hiddenElements.forEach(element => {
             observer.observe(element);
         });
@@ -31,6 +30,7 @@ export default function Home() {
                 <div className={styles.hidden}>
                     <br /><br /><br />
                     <h1>ChatGPT Powered Contract Review</h1>
+                    <br /><br /><br />
                     <Image src="logo.png" width="25%" height="25%" />
                 </div>
                 <section>
@@ -49,10 +49,10 @@ export default function Home() {
                 </section>
                 <section>
                     <div className={styles.hidden}>
-                        <ContractReviewComponent />
+                        <ContractEntryComponent />
                     </div>
                 </section>
-            </main>
-        </div>
+            </main >
+        </div >
     );
 }

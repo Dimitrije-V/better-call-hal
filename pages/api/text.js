@@ -26,8 +26,18 @@ export default async function (req, res) {
     return;
   }
 
+  const contractType = req.body.contractType;
+  if (!contractType) {
+    res.status(400).json({
+      error: {
+        message: "Please select a contract type.",
+      }
+    })
+    return;
+  }
+
   try {
-    const completion = await processContract(contract, openai);
+    const completion = await processContract(contract, openai, contractType);
     res.status(200).json({ result: completion.data.choices[0].message.content });
     return;
   }

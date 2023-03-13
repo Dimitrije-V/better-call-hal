@@ -26,7 +26,7 @@ export default async function (req, res) {
   };
 
   const form = formidable({ multiples: false });
-  form.parse(req, async (error, _, files) => {
+  form.parse(req, async (error, fields, files) => {
     if (error) {
       console.error(error);
       res.status(500).json({
@@ -47,6 +47,10 @@ export default async function (req, res) {
       return;
     };
 
+    const { contractType } = fields;
+    console.log(contractType)
+
+
     try {
       const processedPdf = await pdf(fs.readFileSync(pdfFile.filepath));
       const contract = await processedPdf.text;
@@ -58,9 +62,9 @@ export default async function (req, res) {
         });
         return;
       }
-
-      const completion = await processContract(contract, openai);
-      res.status(200).json({ result: completion.data.choices[0].message.content });
+      console.log(contractType)
+      const completion = await processContract(contract, openai, contractType);
+      res.status(200).json({ result: completion.data.choices[0].message.content, contractType: contractType });
       return;
     }
 
