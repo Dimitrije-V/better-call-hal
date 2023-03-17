@@ -1,31 +1,41 @@
 import {
     generateEmploymentAdviceListPrompt,
-    generateEmploymentFilteringPrompt,
+    generateEmploymentFinalPrompt,
     generateLettingAdviceListPrompt,
-    generateLettingFilteringPrompt,
-    breakIntoSegments
-} from "./utils";
+    generateLettingFinalPrompt,
+    generateShortEmploymentContractAdvice,
+    generateShortLettingContractAdvice,
+    generateAdviceListFilteringPrompt,
+    breakIntoSegments,
+} from './utils';
+import GPT3Encoder from '@syonfox/gpt-3-encoder';
 
 const processContract = async (contract, openai, contractType) => {
-    console.log(contractType);
-    if (contractType === "tenancy") {
-        return processTenancyContract(contract, openai);
-    }
-    else {
-        return processEmploymentContract(contract, openai);
+    const shortContract = GPT3Encoder.countTokens(contract) <= 1500;
+
+    switch (contractType) {
+        case 'tenancy':
+            return shortContract
+                ? processShortTenancyContract(contract, openai)
+                : processTenancyContract(contract, openai);
+        case 'employment':
+            return shortContract
+                ? processShortEmploymentContract(contract, openai)
+                : processEmploymentContract(contract, openai);
+        default:
+            throw new Error('Contract type not recognised');
     }
 };
 
-const processTenancyContract = async (contract, openai) => {
+const processContractByType = async (contract, openai, generateAdviceListPrompt, generateFinalPrompt) => {
     const contractSegmentList = breakIntoSegments(contract);
-    const adviceListPromises = contractSegmentList.map(async (contractSegment, index) => {
-        console.log(`Request ${index} sent`)
+    const adviceListPromises = contractSegmentList.map(async (contractSegment) => {
         const completion = await openai.createChatCompletion({
-            model: "gpt-3.5-turbo",
-            messages: generateLettingAdviceListPrompt(contractSegment),
+            model: 'gpt-3.5-turbo',
+            messages: generateAdviceListPrompt(contractSegment),
             temperature: 0,
+            max_tokens: 1500,
         });
-        console.log(`Request ${index} resolving`)
         return completion.data.choices[0].message.content;
     });
     const adviceList = await Promise.all(adviceListPromises);
@@ -33,49 +43,49 @@ const processTenancyContract = async (contract, openai) => {
     const cleanedAdviceList = adviceList
         .flat()
         .map((adviceString) =>
-            adviceString.replace(/\n/g, "").replace(/-/g, "").trim()
+            adviceString.replace(/\n/g, '').replace(/-/g, '').trim(),
         )
-        .join("\n");
-    const completion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: generateLettingFilteringPrompt(cleanedAdviceList),
+        .join('\n');
+
+    const filteringCompletion = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: generateAdviceListFilteringPrompt(cleanedAdviceList),
         temperature: 0,
-        frequency_penalty: 0.2,
+    });
+    const filteredAdviceList = filteringCompletion.data.choices[0].message.content;
+
+    const completion = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: generateFinalPrompt(filteredAdviceList),
+        temperature: 0,
+    });
+    return completion;
+};
+
+const processTenancyContract = (contract, openai) =>
+    processContractByType(contract, openai, generateLettingAdviceListPrompt, generateLettingFinalPrompt);
+
+const processEmploymentContract = (contract, openai) =>
+    processContractByType(contract, openai, generateEmploymentAdviceListPrompt, generateEmploymentFinalPrompt);
+
+const processShortTenancyContract = async (contract, openai) => {
+    const completion = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: generateShortLettingContractAdvice(contract),
+        temperature: 0,
     });
 
     return completion;
 };
 
-const processEmploymentContract = async (contract, openai) => {
-    const contractSegmentList = breakIntoSegments(contract);
-    const adviceListPromises = contractSegmentList.map(async (contractSegment, index) => {
-        console.log(`Request ${index} sent`)
-        const completion = await openai.createChatCompletion({
-            model: "gpt-3.5-turbo",
-            messages: generateEmploymentAdviceListPrompt(contractSegment),
-            temperature: 0,
-        });
-        console.log(`Request ${index} resolving`)
-        return completion.data.choices[0].message.content;
-    });
-    const adviceList = await Promise.all(adviceListPromises);
-
-    const cleanedAdviceList = adviceList
-        .flat()
-        .map((adviceString) =>
-            adviceString.replace(/\n/g, "").replace(/-/g, "").trim()
-        )
-        .join("\n");
+const processShortEmploymentContract = async (contract, openai) => {
     const completion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: generateEmploymentFilteringPrompt(cleanedAdviceList),
+        model: 'gpt-3.5-turbo',
+        messages: generateShortEmploymentContractAdvice(contract),
         temperature: 0,
-        frequency_penalty: 0.2,
     });
 
     return completion;
 };
 
-module.exports = {
-    processContract,
-};
+export { processContract };

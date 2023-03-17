@@ -1,20 +1,20 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Card, Text, Button, Row, Loading } from "@nextui-org/react";
 import styles from ".././index.module.css";
 
-export default function PdfCard(props) {
+export default function PdfCard({ contractType }) {
     const [pdfFile, setPdfFile] = useState(null);
     const [result, setResult] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const inputFile = useRef(null);
 
-    async function onSubmitPdf(event) {
+    const onSubmitPdf = useCallback(async (event) => {
         event.preventDefault();
         setIsLoading(true);
         try {
             const formData = new FormData();
             formData.append("pdf", pdfFile);
-            formData.append("contractType", props.contractType);
+            formData.append("contractType", contractType);
             const response = await fetch("/api/file", {
                 method: "POST",
                 body: formData,
@@ -27,16 +27,28 @@ export default function PdfCard(props) {
             setResult(data.result);
             setPdfFile(null);
         } catch (error) {
-            // Consider implementing your own error handling logic here
             console.error(error);
             alert(error.message);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [pdfFile, contractType]);
 
     const onButtonClick = () => {
         inputFile.current.click();
+    };
+
+    const renderResult = (result) => {
+        return result.split('\n\n').map((item, index) => {
+            const [quote, summary] = item.split('\n');
+            return (
+                <div key={index} className={styles.result}>
+                    <em>{quote}</em>
+                    <p>{summary}</p>
+                    <Card.Divider />
+                </div>
+            );
+        });
     };
 
     return (
@@ -61,7 +73,7 @@ export default function PdfCard(props) {
                                     onChange={(e) => setPdfFile(e.target.files[0])} />
                             </Button>
                             {isLoading ? (
-                                <Button disabled auto bordered color="primary">
+                                <Button disabled auto bordered>
                                     <Loading type="points-opacity" color="currentColor" size="md" />
                                 </Button>
 
@@ -73,23 +85,11 @@ export default function PdfCard(props) {
                 </Row>
             </Card.Body>
             <Card.Footer>
-                {
-                    result.length > 0 && (
-                        <div className={styles.resultContainer}>
-                            {result.split('\n\n').map((item, index) => {
-                                const [quote, summary] = item.split('\n');
-                                return (
-                                    <div key={index} className={styles.result}>
-                                        <em>{quote}</em>
-                                        <p>{summary}</p>
-                                        <Card.Divider />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )
-                }
-
+                {result.length > 0 && (
+                    <div className={styles.resultContainer}>
+                        {renderResult(result)}
+                    </div>
+                )}
             </Card.Footer>
         </Card >
     );

@@ -26,6 +26,16 @@ export default async function (req, res) {
     return;
   }
 
+
+  if (contract.length > 100000) {
+    res.status(400).json({
+      error: {
+        message: "Please enter your contract.",
+      }
+    });
+    return;
+  }
+
   const contractType = req.body.contractType;
   if (!contractType) {
     res.status(400).json({

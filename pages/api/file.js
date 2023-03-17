@@ -48,8 +48,6 @@ export default async function (req, res) {
     };
 
     const { contractType } = fields;
-    console.log(contractType)
-
 
     try {
       const processedPdf = await pdf(fs.readFileSync(pdfFile.filepath));
