@@ -36,6 +36,8 @@ export default function Home() {
                     <div className={styles.hidden}>
                         <p>
                             The outputs of this tool are <strong>NOT LEGAL ADVICE</strong>.
+                        </p>
+                        <p>
                             All this tool does is read through your tenancy or employment contract, and highlight points that you may want to re-read.
                             If in any doubt, speak to an actual solicitor.
                         </p>
@@ -43,10 +45,10 @@ export default function Home() {
                             In my personal experience, the tool <strong>can</strong> provide useful insights, but has a tendency to pick up on insignificant quotes from your contract.
                         </p>
                         <p>
-                            The tool is not perfect, and is still in development. If you find any bugs, you can let me know at dimitrije@pm.me
+                            The current maximum contract length is 100,000 characters. This may increase in future.
                         </p>
                         <p>
-                            The current maximum contract length is 100,000 characters. This may increase in future.
+                            The tool is not perfect, and is still in development. If you find any bugs, you can let me know at dimitrije@pm.me
                         </p>
                         <p>
                             |<br />

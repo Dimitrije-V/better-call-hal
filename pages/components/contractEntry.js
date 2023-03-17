@@ -1,6 +1,6 @@
 import { Grid, Image } from "@nextui-org/react";
-import PdfCard from "../cards/PdfCard";
-import TextboxCard from "../cards/TextboxCard";
+import PdfCard from "../cards/pdf";
+import TextboxCard from "../cards/textbox";
 import styles from "../index.module.css";
 import { useState } from "react";
 

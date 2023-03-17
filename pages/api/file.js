@@ -60,7 +60,6 @@ export default async function (req, res) {
         });
         return;
       }
-      console.log(contractType)
       const completion = await processContract(contract, openai, contractType);
       res.status(200).json({ result: completion.data.choices[0].message.content, contractType: contractType });
       return;
