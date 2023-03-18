@@ -34,6 +34,7 @@ export default function Home() {
                 </div>
                 <section>
                     <div className={styles.hidden}>
+
                         <p>
                             The outputs of this tool are <strong>NOT LEGAL ADVICE</strong>.
                         </p>
@@ -45,15 +46,22 @@ export default function Home() {
                             In my personal experience, the tool <strong>can</strong> provide useful insights, but has a tendency to pick up on insignificant quotes from your contract.
                         </p>
                         <p>
-                            The current maximum contract length is 100,000 characters. This may increase in future.
+                            |<br />
+                            |<br />
+                            ↓
+                        </p>
+                    </div>
+                </section>
+                <section>
+                    <div className={styles.hidden}>
+                        <p>
+                            Longer contracts may take up to 5 minutes to process. The current maximum contract length is 100,000 characters.
                         </p>
                         <p>
                             The tool is not perfect, and is still in development. If you find any bugs, you can let me know at dimitrije@pm.me
                         </p>
                         <p>
-                            |<br />
-                            |<br />
-                            ↓
+                            Scroll down, and select which type of contract you want to analyse. Then either upload it, or copy and paste it into the text box.
                         </p>
                     </div>
                 </section>

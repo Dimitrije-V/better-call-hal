@@ -29,9 +29,10 @@ const processContract = async (contract, openai, contractType) => {
 
 const processContractByType = async (contract, openai, generateAdviceListPrompt, generateFinalPrompt) => {
     const contractSegmentList = breakIntoSegments(contract);
+    console.log(contractSegmentList);
     const adviceListPromises = contractSegmentList.map(async (contractSegment) => {
         const completion = await openai.createChatCompletion({
-            model: 'gpt-3.5-turbo',
+            model: 'gpt-4',
             messages: generateAdviceListPrompt(contractSegment),
             temperature: 0,
             max_tokens: 1500,
@@ -46,19 +47,20 @@ const processContractByType = async (contract, openai, generateAdviceListPrompt,
             adviceString.replace(/\n/g, '').replace(/-/g, '').trim(),
         )
         .join('\n');
-
-    const filteringCompletion = await openai.createChatCompletion({
-        model: 'gpt-3.5-turbo',
-        messages: generateAdviceListFilteringPrompt(cleanedAdviceList),
-        temperature: 0,
-    });
-    const filteredAdviceList = filteringCompletion.data.choices[0].message.content;
-
+    console.log(cleanedAdviceList);
+    // const filteringCompletion = await openai.createChatCompletion({
+    //     model: 'gpt-4',
+    //     messages: generateAdviceListFilteringPrompt(cleanedAdviceList),
+    //     temperature: 0,
+    // });
+    // const filteredAdviceList = filteringCompletion.data.choices[0].message.content;
+    // console.log(filteredAdviceList);
     const completion = await openai.createChatCompletion({
-        model: 'gpt-3.5-turbo',
-        messages: generateFinalPrompt(filteredAdviceList),
+        model: 'gpt-4',
+        messages: generateFinalPrompt(cleanedAdviceList),
         temperature: 0,
     });
+    console.log(completion.data.choices[0].message.content)
     return completion;
 };
 
@@ -70,7 +72,7 @@ const processEmploymentContract = (contract, openai) =>
 
 const processShortTenancyContract = async (contract, openai) => {
     const completion = await openai.createChatCompletion({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4',
         messages: generateShortLettingContractAdvice(contract),
         temperature: 0,
     });
@@ -80,7 +82,7 @@ const processShortTenancyContract = async (contract, openai) => {
 
 const processShortEmploymentContract = async (contract, openai) => {
     const completion = await openai.createChatCompletion({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4',
         messages: generateShortEmploymentContractAdvice(contract),
         temperature: 0,
     });
