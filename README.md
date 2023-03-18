@@ -14,5 +14,6 @@ How to run locally:
 6. go to to localhost:3000
 
 TODO:
-1. Host it
+1. Allow user to enter OPENAI API key
+2. Payment system
 3. Fix the cursed .css files
