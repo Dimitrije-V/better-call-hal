@@ -28,7 +28,8 @@ export default function PdfCard({ contractType }) {
             setPdfFile(null);
         } catch (error) {
             console.error(error);
-            alert(error.message);
+            console.error(JSON.stringify(error));
+            alert('Apologies, we have failed to process your contract.');
         } finally {
             setIsLoading(false);
         }
