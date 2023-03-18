@@ -1,13 +1,13 @@
 import { Button, Card, Text, Input, Loading, Row } from "@nextui-org/react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import styles from ".././index.module.css";
 
-export default function TextboxCard(props) {
+export default function TextboxCard({ contractType }) {
     const [contractInput, setContractInput] = useState("");
     const [result, setResult] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    async function onSubmitText(event) {
+    const onSubmitText = useCallback(async (event) => {
         event.preventDefault();
         setIsLoading(true);
         try {
@@ -16,7 +16,7 @@ export default function TextboxCard(props) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ contract: contractInput, contractType: props.contractType }),
+                body: JSON.stringify({ contract: contractInput, contractType }),
             });
 
             const data = await response.json();
@@ -27,18 +27,30 @@ export default function TextboxCard(props) {
             setResult(data.result);
             setContractInput("");
         } catch (error) {
-            // Consider implementing your own error handling logic here
             console.error(error);
             alert(error.message);
         } finally {
             setIsLoading(false); // set loading back to false
         }
+    }, [contractInput, contractType]);
+
+    const renderResult = (result) => {
+        return result.split('\n\n').map((item, index) => {
+            const [quote, summary] = item.split('\n');
+            return (
+                <div key={index} className={styles.result}>
+                    <em>{quote}</em>
+                    <p>{summary}</p>
+                    <Card.Divider />
+                </div>
+            );
+        });
     };
 
     return (
         <Card css={{ mw: "900" }}>
             <Card.Header>
-                <Text>Enter Contract Via Textbox</Text>
+                <Text b>Enter Contract Via Textbox</Text>
             </Card.Header>
             <Card.Divider />
             <Card.Body css={{ py: "$10" }}>
@@ -77,23 +89,12 @@ export default function TextboxCard(props) {
                 </div>
             </Card.Body>
             <Card.Footer>
-                {
-                    result.length > 0 && (
-                        <div className={styles.resultContainer}>
-                            {result.split('\n\n').map((item, index) => {
-                                const [quote, summary] = item.split('\n');
-                                return (
-                                    <div key={index} className={styles.result}>
-                                        <em>{quote}</em>
-                                        <p>{summary}</p>
-                                        <Card.Divider />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )
-                }
+                {result.length > 0 && (
+                    <div className={styles.resultContainer}>
+                        {renderResult(result)}
+                    </div>
+                )}
             </Card.Footer>
-        </Card>
+        </Card >
     );
 }

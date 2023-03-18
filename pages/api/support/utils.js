@@ -1,73 +1,156 @@
-function generateLettingAdviceListPrompt(contractSegment) {
+const GPT3Encoder = require("@syonfox/gpt-3-encoder");
+
+function generateLettingAdviceListPrompt(contract) {
+    return [{
+        "role": "system",
+
+        "content": "You are a letting contract analysis tool."
+    },
+    {
+        "role": "user",
+        "content": `Your goal is to read through a contract and identify any quotes that deviate from a standard letting contract.
+        A standard letting contract is a typical contract that an tenant would encounter, and should not contain clauses or terms that could potentially harm the tenant's rights or financial interests.
+        A quote is only the few sentences which demonstrate deviation from a standard letting contract. 
+        Return ONLY exact quotes from the contract. Do not summarize or add any of your own text.
+
+        Contract: ${contract}
+        
+        Identify the quotes that deviate from a standard letting contract:`
+    }];
+};
+
+
+function generateLettingFinalPrompt(adviceList) {
+    return [{
+        "role": "system",
+
+        "content": "You are an letting contract review tool."
+    },
+    {
+        "role": "user",
+        "content": `The user will submit a list of quotes from an letting contract. Read through it, and judge whether any of them deviates from a standard letting contract.
+        A standard letting contract is a typical contract that an tenant would encounter, and should not contain clauses or terms that could potentially harm the tenant's rights or financial interests.
+        If any quote does deviate from a standard letting contract, summarise it, and include both it and the summary in your response. If it doesn't, ignore it. The format of the end response must be:
+
+        Quote: "[quote from contract segment]",
+        Summary: [your summary]
+        
+        and so on for each quote. Quotes must be separated by one newline from summaries, summaries must be separated by two newlines from quotes.
+        
+        List of quotes: ${adviceList}
+        
+        Review and summarize the quotes:`
+    }];
+};
+
+
+
+const generateShortLettingContractAdvice = (contract) => {
     return [
         {
             "role": "system",
             "content": `You are a letting contract analysis tool.
-            Your goal is to read through segments of a letting contract and, thinking from the perspective of the tenant, return any particularly unusual and or adverse quotes found within it. 
-            Return ONLY unchanged quotes from the contract. Do not summarise or add any of your own text.` },
-        {
-            "role": "user", "content": `Contract segment: ${contractSegment}`
+            Your goal is to read through a contract and identify any quotes that deviate from a standard letting contract.
+            A standard letting contract is a typical contract that an tenant would encounter, and should not contain clauses or terms that could potentially harm the tenant's rights or financial interests.
+            If any quote does deviate from a standard letting contract, summarise it, and include both it and the summary in your response. If it doesn't, ignore it. 
+            The format of the end response must be:
+
+            'Quote: \"[quote from contract segment]\",
+            Summary: [your summary]'
+                and so on for each quote.
+
+            Quotes must be seperated by one newline from summaries , summaries must be separated by two newlines from quotes.`
         },
         {
-            "role": "assistant", "content": "Adverse points:"
+            "role": "user", "content": `Contract: ${contract}`
         }
     ];
 };
 
-function generateLettingFilteringPrompt(adviceList) {
-    return [
-        {
-            "role": "system",
-            "content": `You are a letting contract review tool.
-                The user will submit a list of quotes from a letting contract. Read through each quote, and judge whether it deviates from a standard letting contract.
-                If it does, summarise it, and include both it and the summary in your response. If it doesn't, ignore it.
-                The format of the end response must be: 
-                'Quote: \"[quote from contract segment]\",
-                Summary: [your summary]'
+function generateEmploymentAdviceListPrompt(contract) {
+    return [{
+        "role": "system",
+
+        "content": "You are an employment contract analysis tool."
+    },
+    {
+        "role": "user",
+        "content": `Your goal is to read through a contract and identify any quotes that deviate from a standard employment contract.
+        A standard employment contract is a typical contract that an tenant would encounter, and should not contain clauses or terms that could potentially harm the employee's rights or financial interests.
+        A quote is only the few sentences which demonstrate deviation from a standard employment contract. 
+        Return ONLY exact quotes from the contract. Do not summarize or add any of your own text.
+
+        Contract: ${contract}
         
-                'Quote: \"[quote from contract segment]\",
-                Summary: [your summary]'...
-                 and so on for each quote.
-                Quotes must be seperated by one newline from summaries , summaries must be separated by two newlines from quotes.`
-        },
-        { "role": "user", "content": adviceList }
-    ];
+        Identify the quotes that deviate from a standard employment contract:`
+    }];
 };
 
-const generateEmploymentAdviceListPrompt = (contract) => {
+
+function generateEmploymentFinalPrompt(adviceList) {
+    return [{
+        "role": "system",
+
+        "content": "You are an employment contract review tool."
+    },
+    {
+        "role": "user",
+        "content": `The user will submit a list of quotes from an employment contract. Read through it, and judge whether any of them deviates from a standard employment contract.
+        A standard employment contract is a typical contract that an tenant would encounter, and should not contain clauses or terms that could potentially harm the employee's rights or financial interests.
+        If any quote does deviate from a standard employment contract, summarise it, and include both it and the summary in your response. If it doesn't, ignore it. 
+        The format of the end response must be:
+
+        Quote: "[quote from contract segment]",
+        Summary: [your summary]
+        
+        and so on for each quote. Quotes must be separated by one newline from summaries, summaries must be separated by two newlines from quotes.
+        
+        List of quotes: ${adviceList}
+        
+        Review and summarize the quotes:`
+    }];
+};
+
+
+const generateShortEmploymentContractAdvice = (contract) => {
     return [
         {
             "role": "system",
             "content": `You are an employment contract analysis tool.
-            Your goal is to read through a contract and, thinking from the perspective of the employee, return any particularly unusual and or adverse quotes found within it. 
-            Return ONLY unchanged quotes from the contract. Do not summarise or add any of your own text.` },
-        {
-            "role": "user", "content": `Contract: ${contract}`
+            Your goal is to read through a contract and identify any quotes that deviate from a standard employment contract.
+            A standard employment contract is a typical contract that an tenant would encounter, and should not contain clauses or terms that could potentially harm the employee's rights or financial interests.
+            If any quote does deviate from a standard employment contract, summarise it, and include both it and the summary in your response. If it doesn't, ignore it. 
+            The format of the end response must be:
+
+            'Quote: \"[quote from contract segment]\",
+            Summary: [your summary]'
+                and so on for each quote.
+
+            Quotes must be seperated by one newline from summaries , summaries must be separated by two newlines from quotes.`
         },
         {
-            "role": "assistant", "content": "Adverse points:"
+            "role": "user", "content": `Contract: ${contract}`
         }
     ];
 };
-
-const generateEmploymentFilteringPrompt = (adviceList) => {
+const generateAdviceListFilteringPrompt = (adviceList) => {
     return [
         {
             "role": "system",
-            "content": `You are an employment contract review tool.
-                The user will submit a UK employment contract. Read through it, and judge whether any sections are adverse towards the employee. Low salary, long hours, etc.
-                If it does, summarise it, and include both it and the summary in your response. If it doesn't, ignore it.
-                The format of the end response must be:
-                'Quote: \"[quote from contract segment]\",
-                Summary: [your summary]'
 
-                'Quote: \"[quote from contract segment]\",
-                Summary: [your summary]'...
-                    and so on for each quote.
-                Quotes must be seperated by one newline from summaries , summaries must be separated by two newlines from quotes.`
+            "content": "You are a text formatting tool."
         },
-        { "role": "user", "content": adviceList }
-    ];
+        {
+            "role": "user",
+            "content": `
+                Within this list of quotes will be text like "Nothing found", and random characters.
+                Remove any such text or characters, but preserve all the quotes from the contract.
+                The format of the end response must be:
+                Quote: "[quote from contract segment]",
+                and so on for each quote.
+                List of quotes with extra text: ${adviceList}
+                Filter out the extra text and preserve the quotes:`
+        }];
 };
 
 const breakIntoSegments = (contract) => {
@@ -76,7 +159,9 @@ const breakIntoSegments = (contract) => {
     const newArr = [""];
     let counter = 0;
     arr.forEach(string => {
-        if ((newArr[counter].length + string.length) < 6000) {
+        const existingTokenCount = GPT3Encoder.countTokens(newArr[counter]);
+        const newTokenCount = GPT3Encoder.countTokens(string);
+        if (existingTokenCount + newTokenCount < 4092) {
             newArr[counter] = newArr[counter].concat(string)
         } else {
             counter += 1;
@@ -86,11 +171,13 @@ const breakIntoSegments = (contract) => {
     return newArr;
 };
 
-
 module.exports = {
     generateLettingAdviceListPrompt,
-    generateLettingFilteringPrompt,
+    generateLettingFinalPrompt,
+    generateShortLettingContractAdvice,
     generateEmploymentAdviceListPrompt,
-    generateEmploymentFilteringPrompt,
-    breakIntoSegments,
+    generateEmploymentFinalPrompt,
+    generateShortEmploymentContractAdvice,
+    generateAdviceListFilteringPrompt,
+    breakIntoSegments
 }

@@ -48,8 +48,6 @@ export default async function (req, res) {
     };
 
     const { contractType } = fields;
-    console.log(contractType)
-
 
     try {
       const processedPdf = await pdf(fs.readFileSync(pdfFile.filepath));
@@ -62,7 +60,6 @@ export default async function (req, res) {
         });
         return;
       }
-      console.log(contractType)
       const completion = await processContract(contract, openai, contractType);
       res.status(200).json({ result: completion.data.choices[0].message.content, contractType: contractType });
       return;
