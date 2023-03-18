@@ -33,7 +33,6 @@ const processContractByType = async (contract, openai, generateAdviceListPrompt,
             model: 'gpt-4',
             messages: generateAdviceListPrompt(contractSegment),
             temperature: 0,
-            max_tokens: 3050,
         });
         console.log(completion.data.choices[0].message.content);
         return completion.data.choices[0].message.content;
