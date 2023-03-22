@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from "openai";
-import { processContract } from "./support/processContract";
+import { generateAdviceList } from "./support/generateAdviceList";
 import fs from "fs";
 import formidable from "formidable";
 import pdf from "pdf-parse"
@@ -52,7 +52,7 @@ export default async function (req, res) {
     try {
       const processedPdf = await pdf(fs.readFileSync(pdfFile.filepath));
       const contract = await processedPdf.text;
-      if (contract.length > 100000) {
+      if (contract.length > 200000) {
         res.status(400).json({
           error: {
             message: "PDF file too long",
@@ -60,14 +60,14 @@ export default async function (req, res) {
         });
         return;
       }
-      const completion = await processContract(contract, openai, contractType);
-      res.status(200).json({ result: completion.data.choices[0].message.content, contractType: contractType });
+      const adviceList = await generateAdviceList(contract, openai, contractType);
+      res.status(200).json({ result: adviceList });
       return;
     }
-
     catch (error) {
       if (error.response) {
-        console.error(error.response.status, error.response.data);
+        console.log(`Error response : ${error.response}`);
+        console.log(error.response.status, error.response.data);
         res.status(error.response.status).json(error.response.data);
         return;
       }
@@ -75,7 +75,7 @@ export default async function (req, res) {
       res.status(500).json({
         error: {
           message: 'An error occurred during your request.',
-        },
+        }
       });
       return;
     }
