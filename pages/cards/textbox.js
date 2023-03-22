@@ -11,7 +11,7 @@ export default function TextboxCard({ contractType }) {
         event.preventDefault();
         setIsLoading(true);
         try {
-            const response = await fetch("/api/text", {
+            const adviceListResponse = await fetch("/api/text", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -19,6 +19,17 @@ export default function TextboxCard({ contractType }) {
                 body: JSON.stringify({ contract: contractInput, contractType }),
             });
 
+            const adviceListData = await adviceListResponse.json();
+            if (adviceListResponse.status !== 200) {
+                throw adviceListData.error || new Error(`Request failed with status ${adviceListResponse.status}`);
+            }
+            const response = await fetch("/api/final", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ adviceList: adviceListData.result, contractType }),
+            });
             const data = await response.json();
             if (response.status !== 200) {
                 throw data.error || new Error(`Request failed with status ${response.status}`);
@@ -27,7 +38,6 @@ export default function TextboxCard({ contractType }) {
             setResult(data.result);
             setContractInput("");
         } catch (error) {
-            console.error(error);
             console.error(JSON.stringify(error));
             alert("Apologies, we have failed to process your contract.");
         } finally {

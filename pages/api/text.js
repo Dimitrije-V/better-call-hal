@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from "openai";
-import { processContract } from "./support/processContract";
+import { generateAdviceList } from "./support/generateAdviceList";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -27,10 +27,10 @@ export default async function (req, res) {
   }
 
 
-  if (contract.length > 100000) {
+  if (contract.length > 200000) {
     res.status(400).json({
       error: {
-        message: "Please enter your contract.",
+        message: "Your contract is too long.",
       }
     });
     return;
@@ -47,8 +47,8 @@ export default async function (req, res) {
   }
 
   try {
-    const completion = await processContract(contract, openai, contractType);
-    res.status(200).json({ result: completion.data.choices[0].message.content });
+    const adviceList = await generateAdviceList(contract, openai, contractType);
+    res.status(200).json({ result: adviceList });
     return;
   }
 

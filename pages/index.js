@@ -28,8 +28,9 @@ export default function Home() {
         <div>
             <main className={styles.main}>
                 <div className={styles.hidden}>
-                    <br /><br /><br />
-                    <h1>ChatGPT Powered Contract Review</h1>
+                    <br /><br />
+                    <h1>Review My Contract</h1>
+                    <br /><br />
                     <Image src="logo.png" width="25%" height="25%" />
                 </div>
                 <section>
@@ -39,11 +40,10 @@ export default function Home() {
                             The outputs of this tool are <strong>NOT LEGAL ADVICE</strong>.
                         </p>
                         <p>
-                            All this tool does is read through your tenancy or employment contract, and highlight points that you may want to re-read.
-                            If in any doubt, speak to an actual solicitor.
+                            This tool will analyse your tenancy or employment contract with GPT4, and highlight points that you may want to re-read.
                         </p>
                         <p>
-                            In my personal experience, the tool <strong>can</strong> provide useful insights, but has a tendency to pick up on insignificant quotes from your contract.
+                            It will not advise you on what to do, or what your rights are. If in any doubt, speak to an actual solicitor.
                         </p>
                         <p>
                             |<br />
