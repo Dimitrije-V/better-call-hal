@@ -1,7 +1,7 @@
 # better-call-hal
 
 
-Letting and employment contract review tool powered by ChatGPT.
+Letting and employment contract review tool powered by ChatGPT (GPT-4).
 
 
 How to run locally:
