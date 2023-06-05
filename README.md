@@ -11,7 +11,7 @@ How to run locally:
 3. create a .env file
 4. paste in  OPENAI_API_KEY=[a valid OpenAI API key]
 5. npm run dev 
-6. go to to localhost:3000
+6. go to localhost:3000
 
 TODO:
 1. Allow user to enter OpenAI API key
